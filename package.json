@@ -41,7 +41,11 @@
   "dependencies": {},
   "devDependencies": {
     "@types/node": "^16.11.12",
+    "@types/prettier": "^2.4.2",
     "@types/tape": "^4.13.2",
+    "axios": "^0.24.0",
+    "esbuild": "^0.14.8",
+    "esbuild-runner": "^2.2.1",
     "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
     "tape": "^5.4.0",

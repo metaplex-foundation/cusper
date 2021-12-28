@@ -1,11 +1,15 @@
 import test from 'tape'
-import * as anchor from '../src/anchor-errors'
+import * as anchor from '../src/errors/anchor'
+import { tokenLendingErrors } from '../src/errors/token-lending'
 import { initCusper } from '../src/resolve-error'
 import { strict as assert } from 'assert'
 import { ErrorWithLogs } from '../src/types'
 
 const cusper = initCusper()
 
+// -----------------
+// Anchor
+// -----------------
 test('resolving anchor error', (t) => {
   const err = cusper.errorFromCode(anchor.LangErrorCode.ConstraintSeeds)
   assert(err != null, 'finds the error')
@@ -46,5 +50,19 @@ test('throwing anchor error', (t) => {
     )
     t.equal(err.name, 'AnchorError#ConstraintMut', 'includes correct name')
   }
+  t.end()
+})
+
+// -----------------
+// Token Lending
+// -----------------
+test('resolving token lending error', (t) => {
+  const code = 2
+  const tokenLendingError = tokenLendingErrors.get(code)!
+  const err = cusper.errorFromCode(code)
+  assert(err != null, 'finds the error')
+  t.equal(err.code, code, 'resolves correct error')
+  t.equal(err.message, tokenLendingError.message, 'includes error message')
+  t.equal(err.name, 'TokenLendingError#NotRentExempt', 'includes correct name')
   t.end()
 })
