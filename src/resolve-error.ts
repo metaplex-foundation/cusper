@@ -14,15 +14,9 @@ import {
 // -----------------
 export type ErrorResolverInitArgs = {
   resolveErrorFromCode?: ResolveErrorFromCode
-  throwErrors?: boolean
 }
 class ErrorResolver {
-  private readonly resolveErrorFromCode: ResolveErrorFromCode | undefined
-
-  constructor(args?: ErrorResolverInitArgs) {
-    args = args ?? {}
-    this.resolveErrorFromCode = args.resolveErrorFromCode
-  }
+  constructor(private readonly resolveErrorFromCode?: ResolveErrorFromCode) {}
 
   errorFromCode(
     code: number,
@@ -98,8 +92,8 @@ class ErrorResolver {
   }
 }
 
-export function initCusper(args?: ErrorResolverInitArgs) {
-  return new ErrorResolver(args)
+export function initCusper(resolveErrorFromCode?: ResolveErrorFromCode) {
+  return new ErrorResolver(resolveErrorFromCode)
 }
 
 // -----------------
@@ -109,6 +103,25 @@ export class CusperUnknownError extends Error {
   constructor(readonly code: number, ...params: any[]) {
     super(...params)
     this.name = 'CusperUnknownError'
+  }
+}
+
+// -----------------
+// Custom Program Error
+// -----------------
+/**
+ * Used by implementers to provide their own errors to be resolved by cusper.
+ */
+export class CustomProgramError extends Error {
+  /**
+   * Creates an instance of a {@link CustomProgramError}.
+   *
+   * @param code the error code for which this error was resolved
+   * @param name the name of the error
+   */
+  constructor(readonly code: number, name: string, ...params: any[]) {
+    super(...params)
+    this.name = `CustomProgramError#${name}`
   }
 }
 
