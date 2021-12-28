@@ -1,5 +1,6 @@
 import { errorCodeFromLogs } from './parse-error'
-import * as anchor from './anchor-errors'
+import * as anchor from './errors/anchor'
+import { tokenLendingErrors } from './errors/token-lending'
 import {
   ErrorMeta,
   ErrorWithCode,
@@ -41,6 +42,13 @@ class ErrorResolver {
 
     // Then try errors of known programs
     err = AnchorError.fromCode(code)
+    if (err != null) {
+      return this.passPreparedError(
+        err,
+        captureBoundaryFn ?? this.errorFromCode
+      )
+    }
+    err = TokenLendingError.fromCode(code)
     if (err != null) {
       return this.passPreparedError(
         err,
@@ -97,7 +105,7 @@ export function initCusper(args?: ErrorResolverInitArgs) {
 // -----------------
 // Unknown Error
 // -----------------
-class CusperUnknownError extends Error {
+export class CusperUnknownError extends Error {
   constructor(readonly code: number, ...params: any[]) {
     super(...params)
     this.name = 'CusperUnknownError'
@@ -107,7 +115,7 @@ class CusperUnknownError extends Error {
 // -----------------
 // Anchor
 // -----------------
-class AnchorError extends Error {
+export class AnchorError extends Error {
   constructor(readonly code: number, name: string, ...params: any[]) {
     super(...params)
     this.name = `AnchorError#${name}`
@@ -127,6 +135,27 @@ class AnchorError extends Error {
     const errorMeta = AnchorError.errorMap.get(code)
     return errorMeta != null
       ? new AnchorError(errorMeta.code, errorMeta.name, errorMeta.message)
+      : null
+  }
+
+  toString() {
+    return `${this.name}: ${this.message}`
+  }
+}
+
+// -----------------
+// Token Lending
+// -----------------
+export class TokenLendingError extends Error {
+  constructor(readonly code: number, name: string, ...params: any[]) {
+    super(...params)
+    this.name = `TokenLendingError#${name}`
+  }
+  static errorMap = tokenLendingErrors
+  static fromCode(code: number): MaybeErrorWithCode {
+    const errorMeta = TokenLendingError.errorMap.get(code)
+    return errorMeta != null
+      ? new TokenLendingError(errorMeta.code, errorMeta.name, errorMeta.message)
       : null
   }
 

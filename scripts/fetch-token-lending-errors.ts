@@ -11,7 +11,8 @@ const tokenLendingErrorsFile = path.join(
   __dirname,
   '..',
   'src',
-  'token-lending-errors.ts'
+  'errors',
+  'token-lending.ts'
 )
 
 const formatOpts: Options = {
