@@ -1,7 +1,5 @@
 /**
  * Error metadata used internally to create errors
- *
- * @private
  */
 export type ErrorMeta = { code: number; name: string; message: string }
 /**
@@ -12,8 +10,9 @@ export type ErrorWithCode = Error & { code: number }
  * Error that includes a `logs` property as is provided by `@solana/web3.js`.
  */
 export type ErrorWithLogs = Error & { logs: string[] }
+
 /**
- * @private
+ * Possibly {@link ErrorWithCode} or None.
  */
 export type MaybeErrorWithCode = ErrorWithCode | null | undefined
 /**

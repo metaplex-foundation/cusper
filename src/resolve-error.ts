@@ -12,7 +12,7 @@ import {
 // -----------------
 // Error Resolver
 // -----------------
-class ErrorResolver {
+export class ErrorResolver {
   constructor(private readonly resolveErrorFromCode?: ResolveErrorFromCode) {}
 
   /**
