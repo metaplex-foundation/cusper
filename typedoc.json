@@ -1,6 +1,6 @@
 {
-  "entryPoints": ["src/amman.ts"],
-  "exclude": "\"src/{cli,validator}/*\"",
+  "entryPoints": ["src/cusper.ts"],
+  "exclude": "\"src/{errors/*,parse-error}/*\"",
   "excludePrivate": true,
   "categorizeByGroup": false,
   "readme": "none",
