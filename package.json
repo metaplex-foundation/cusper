@@ -1,6 +1,6 @@
 {
   "name": "@metaplex-foundation/cusper",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Resolves Custom Program Errors from Solana program logs or error codes.",
   "main": "dist/src/cusper.js",
   "types": "dist/src/cusper.d.ts",
