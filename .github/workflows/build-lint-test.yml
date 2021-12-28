@@ -2,7 +2,7 @@ name: Build Lint and Test Cusper
 
 on:
   push:
-    branches: [ master, thlorenz/feat/basic-errors ]
+    branches: [ master ]
   pull_request:
     branches: [ master ]
 
