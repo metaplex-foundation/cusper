@@ -1,5 +1,10 @@
 // https://github.com/project-serum/anchor/blob/1749a7bd53eec516416a61598290da1431e2910f/ts/src/error.ts
 
+/**
+ * Maps Error names to Error codes
+ *
+ * @private
+ */
 export const LangErrorCode = {
   // Instructions.
   InstructionMissing: 100,
@@ -55,6 +60,10 @@ export const LangErrorCode = {
   Deprecated: 5000,
 }
 
+/**
+ * Maps Error Codes to Error messages
+ * @private
+ */
 export const LangErrorMessage = new Map([
   // Instructions.
   [
