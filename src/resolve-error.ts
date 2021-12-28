@@ -12,12 +12,17 @@ import {
 // -----------------
 // Error Resolver
 // -----------------
-export type ErrorResolverInitArgs = {
-  resolveErrorFromCode?: ResolveErrorFromCode
-}
 class ErrorResolver {
   constructor(private readonly resolveErrorFromCode?: ResolveErrorFromCode) {}
 
+  /**
+   * Attempts to resolve the provided error code to a known or custom error.
+   *
+   * @param captureBoundaryFn is used to exclude everything after (including)
+   * that function from the stack trace if possible
+   * @param fallbackToUnknown unless `false` a {@link CusperUnknownError} is
+   * returned when resolution fails
+   */
   errorFromCode(
     code: number,
     captureBoundaryFn?: Function,
@@ -63,6 +68,12 @@ class ErrorResolver {
     }
   }
 
+  /**
+   * Attempts to parse the error code from the provied logs and then resolve it
+   * to a known or custom error.
+   * @param fallbackToUnknown unless `false` a {@link CusperUnknownError} is
+   * returned when resolution fails
+   */
   errorFromProgramLogs(
     logs: string[],
     fallbackToUnknown = true
@@ -73,9 +84,13 @@ class ErrorResolver {
       : this.errorFromCode(code, this.errorFromProgramLogs, fallbackToUnknown)
   }
 
-  throwError(arg: ErrorWithLogs) {
+  /**
+   * Throws an error that it attempts to resolve from the logs of the provided error.
+   * If no error can be resolved it throws a {@link CusperUnknownError} instead
+   */
+  throwError(error: ErrorWithLogs) {
     const err: ErrorWithCode =
-      (arg.logs != null && this.errorFromProgramLogs(arg.logs, true)) ||
+      (error.logs != null && this.errorFromProgramLogs(error.logs, true)) ||
       new CusperUnknownError(
         -1,
         'Error created without logs and thus without error code'
@@ -92,6 +107,12 @@ class ErrorResolver {
   }
 }
 
+/**
+ * Initializes a Custom Program Error Resolver, aka _Cusper_.
+ *
+ * @param resolveErrorFromCode if provided it will be used to resolve custom
+ * errors before falling back to known program errors
+ */
 export function initCusper(resolveErrorFromCode?: ResolveErrorFromCode) {
   return new ErrorResolver(resolveErrorFromCode)
 }
@@ -99,6 +120,10 @@ export function initCusper(resolveErrorFromCode?: ResolveErrorFromCode) {
 // -----------------
 // Unknown Error
 // -----------------
+/**
+ * This error is returned/raised when an error code couldn't be found or resolved to a
+ * custom or known error.
+ */
 export class CusperUnknownError extends Error {
   constructor(readonly code: number, ...params: any[]) {
     super(...params)
@@ -128,6 +153,10 @@ export class CustomProgramError extends Error {
 // -----------------
 // Anchor
 // -----------------
+/**
+ * An error raised by the anchor program before getting to the actual program
+ * implementation.
+ */
 export class AnchorError extends Error {
   constructor(readonly code: number, name: string, ...params: any[]) {
     super(...params)
@@ -159,6 +188,12 @@ export class AnchorError extends Error {
 // -----------------
 // Token Lending
 // -----------------
+/**
+ * Error raised by the token lending program.
+ * Please note that error codes overlap with other _known_ programs as they start at `0`.
+ * Thus in some cases they might be wrongly represented and actually not
+ * originate from the token lending program.
+ */
 export class TokenLendingError extends Error {
   constructor(readonly code: number, name: string, ...params: any[]) {
     super(...params)

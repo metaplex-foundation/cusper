@@ -1,6 +1,10 @@
 // Generated via ./scripts/fetch-token-lending-errors.ts
 
 import { ErrorMeta } from '../types'
+/**
+ * Maps error codes to {@link ErrorMeta}.
+ * @private
+ */
 export const tokenLendingErrors: Map<number, ErrorMeta> = new Map([
   [
     0,
